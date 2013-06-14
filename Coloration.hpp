@@ -13,15 +13,21 @@
 using std::vector;
 using namespace std;
 
-class Coloration:public vector<Sommet>
+class Coloration:public vector<Sommet*>
 {
 private:
 	int num;
 public:
 	Coloration(int);
-
-	int getNumvoid(void);
+	Coloration(Coloration const &);
+	int nextSommetWithEt2(unsigned int) const;
+	int getNum(void);
+	void setNum(int);
+	void replace(Sommet const &, Sommet &);
 	void displayInConsole(void);
+	void displayAddressesInConsole(void);
+	int getAmbigousColor(int);
+	Sommet * getSommetByNum(int);
 };
 
 
