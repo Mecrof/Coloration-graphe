@@ -13,24 +13,24 @@ Coloration::Coloration(int n)
 
 Coloration::Coloration(Coloration const & c)//:vector<Sommet*>(c)
 {
+	int i = 0, nbEt, k, j, nbSommet = c.size();
+	vector<Sommet*>::iterator itDsEt;
+	Sommet * newS;
 	//recopier les sommets avec des nouvelles adresses.
 	this->num = c.num;
-	int nbSommet = c.size();
 	this->reserve(nbSommet);
-	Sommet * newS;
-	for (int i = 0; i<nbSommet; ++i)
+	while(i<nbSommet)
 	{
 		newS = new Sommet(c.at(i)->getNum());
 		this->push_back(newS);
-	}
-	vector<Sommet*>::iterator itDsEt;
-	int nbEt;
-	int k;
-	int m;
-	for(int i = 0; i<nbSommet; ++i)
+		++i;
+	};
+	i = 0;
+	while(i<nbSommet)
 	{
 		nbEt = c.at(i)->getNumberOfEt();
-		for (int j = 0; j<nbEt; ++j)
+		j = 0;
+		while(j<nbEt)
 		{
 			if (j>0) this->at(i)->createNewEt(); //car un premier etage est deja crée par defaut.
 			for(itDsEt = c.at(i)->getEt(j+1).begin(); itDsEt < c.at(i)->getEt(j+1).end(); ++itDsEt)
@@ -47,10 +47,10 @@ Coloration::Coloration(Coloration const & c)//:vector<Sommet*>(c)
 					while(c.at(k)->getNum()!=(*itDsEt)->getNum() && k<nbSommet)
 					{
 						k++;
-					}
+					};
 					if (k>=nbSommet)
 					{
-						cout<<"error:: sommet not found in cloning of Coloration."<<endl;
+						cout<<"error:: sommet not found in Coloration cloning ."<<endl;
 					}
 					else
 					{
@@ -59,8 +59,10 @@ Coloration::Coloration(Coloration const & c)//:vector<Sommet*>(c)
 					}
 				}
 			}
+			++j;
 		}
-	}
+		++i;
+	};
 }
 
 int Coloration::nextSommetWithEt2(unsigned int pos) const
@@ -106,12 +108,10 @@ void Coloration::displayInConsole(void)
 		for (it2=(*it)->getEt(1).begin();it2!=(*it)->getEt(1).end();it2++)
 		{
 			cout<< (*it2)->getNum()*(*it2)->getSign()<<",";
-			//cout<< (*it2)->getNum()<<",";
 		}
 		cout<<"]"<<endl;
 		if((*it)->hasMultipleEt())
 		{
-			//a modifier
 			cout<<"   \t[";
 			for (it2=(*it)->getEt(2).begin();it2!=(*it)->getEt(2).end();it2++)
 			{
@@ -154,48 +154,6 @@ void Coloration::displayAddressesInConsole(void)
 
 int Coloration::getAmbigousColor(int posSommet)
 {
-	/*
-	vector<Sommet*>::iterator it_SommetDansEt1;
-	vector<Sommet*>::iterator it_SommetEt1DansEt1;
-	vector<Sommet*>::iterator it_SommetEt1DansEt2;
-
-	cout<<"getAmbigiousCol"<<endl;
-	cout<<"---Boucle1"<<endl;
-	for(it_SommetDansEt1=this->at(posSommet)->getEt(1).begin();
-			it_SommetDansEt1<this->at(posSommet)->getEt(1).end();
-			++it_SommetDansEt1)
-	{
-		for(it_SommetEt1DansEt1=(*it_SommetDansEt1)->getEt(1).begin();
-				it_SommetEt1DansEt1<(*it_SommetDansEt1)->getEt(1).end();
-				++it_SommetEt1DansEt1)
-		{
-			cout<<"    ? "<<(*it_SommetEt1DansEt1)->getNum()<<"=="<<this->at(posSommet)->getSommetAt(2,0).getNum()<<endl;
-			if ( (*it_SommetEt1DansEt1)->getNum() == this->at(posSommet)->getSommetAt(2,0).getNum())
-			{
-				return -1;
-			}
-		}
-	}
-	cout<<"---Boucle2"<<endl;
-	for(it_SommetDansEt1=this->at(posSommet)->getEt(1).begin();
-				it_SommetDansEt1<this->at(posSommet)->getEt(1).end();
-				++it_SommetDansEt1)
-	{
-		for(it_SommetEt1DansEt2=this->at(posSommet)->getSommetAt(2,0).getEt(1).begin();
-						it_SommetEt1DansEt2<this->at(posSommet)->getSommetAt(2,0).getEt(1).end();
-						++it_SommetEt1DansEt2)
-		{
-			cout<<"    ? "<<(*it_SommetDansEt1)->getNum()<<"=="<<(*it_SommetEt1DansEt2)->getNum()<<endl;
-			if ( (*it_SommetDansEt1)->getNum() == (*it_SommetEt1DansEt2)->getNum())
-			{
-				return -1;
-			}
-		}
-	}
-	cout<<"---return 0"<<endl;
-	return 0;
-	//*/
-	//*
 	Sommet * currentSommet = this->at(posSommet);
 	vector<Sommet*>::iterator it_SommetDansEt2;
 	vector<Sommet*>::iterator it_SommetDansEt1;
@@ -243,7 +201,6 @@ int Coloration::getAmbigousColor(int posSommet)
 	}
 	//si aucune ambiguite est trouvee
 	return -1;
-	//*/
 }
 
 Sommet * Coloration::getSommetByNum(int n)

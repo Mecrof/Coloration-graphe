@@ -10,10 +10,15 @@
 #include "Sommet.hpp"
 #include "Coloration.hpp"
 #include "Model.hpp"
+#include "Parser.hpp"
+//#include "IntegerVector.hpp"
 #include <time.h>
-//#include <boost/spirit.hpp>
+#include <sys/time.h>
+#include <string>
+//#include <boost/spirit/include/classic.hpp>
 
 using namespace std;
+
 
 /*
 		1	[]
@@ -38,10 +43,69 @@ using namespace std;
 		10	[6,7][8,9]
 		11	[7,10][9]
 */
+/*
+bool
+parse_numbers(char const* str, vector<IntegerVector<vector<int> > > int_v)
+{
+    return parse(str,
+    		(
+    				real_p[push_back_a(v)] >> *(',' >> real_p[push_back_a(v)])
+    		) ,
+    		space_p).full;
+}
+//*/
 
 int main() {
 	cout<<"##Start"<<endl;
 
+	/*
+	Coloration int3(1);
+		Sommet s1(1);
+		Sommet s2(2);
+		Sommet s3(3);
+		Sommet s4(4);
+		Sommet s5(5);
+		Sommet s6(6);
+		Sommet s7(7);
+		Sommet s8(8);
+		Sommet s9(9);
+		s2.addSommetAt(&s1,1);
+
+		s3.addSommetAt(&s1,1);
+		s3.addSommetAt(&s2,1);
+
+		s4.addSommetAt(&s1,1);
+		s4.addSommetAt(&s2,1);
+
+		s5.addSommetAt(&s1,1);
+		s5.addSommetAt(&s2,1);
+
+		s6.addSommetAt(&s1,1);
+		s6.addSommetAt(&s7,1);
+		s6.createNewEt();
+		s6.addSommetAt(&s3,2);
+		s6.addSommetAt(&s5,2);
+
+		s6.addSommetAt(&s1,1);
+				s6.addSommetAt(&s7,1);
+				s6.createNewEt();
+				s6.addSommetAt(&s3,2);
+				s6.addSommetAt(&s5,2);
+
+			int3.push_back(&s1);
+			int3.push_back(&s2);
+			int3.push_back(&s3);
+			int3.push_back(&s4);
+			int3.push_back(&s5);
+			int3.push_back(&s6);
+			int3.push_back(&s7);
+			int3.push_back(&s8);
+			int3.push_back(&s9);
+			int3.displayInConsole();
+		Model m;
+
+		m.addColoration(int3);
+		//*/
 	/*
 	Coloration int2(1);
 	Sommet s1(1);
@@ -100,7 +164,7 @@ int main() {
 
 	m.addColoration(int2);
 	//*/
-	//*
+	/*
 	Coloration int1(1);
 	Sommet s1(1);
 	Sommet s3(3);
@@ -139,23 +203,48 @@ int main() {
 	m.addColoration(int1);
 	//*/
 	//*
-	//time_t t1, t2;
-	//t1 = time(NULL);
-	const clock_t begin_time = clock();
-	// do something
-	vector<Coloration> vect_col = m.generer(int1);
 
-	//std::cout << float( clock () - begin_time ) /  CLOCKS_PER_SEC;
-
-	//t2 = time(NULL);
-	float tps = float( clock () - begin_time )/  CLOCKS_PER_SEC;
-
-	for(int i=0; i<vect_col.size();++i)
+timeval start, end;
+		gettimeofday(&start, NULL);
+	Parser p;
+	string s("./charpente7.txt");
+	p.setFilepath(s);
+	if (p.parseFile())
 	{
-		vect_col.at(i).displayInConsole();
+		Model m;
+		Coloration col = p.getCol();
+
+
+		//time_t t1, t2;
+		//t1 = time(NULL);
+		
+		vector<Coloration> vect_col = m.generer(col);
+		
+		gettimeofday(&end, NULL);
+		double tps = (end.tv_usec - start.tv_usec);
+		//t2 = time(NULL);
+		//double tps=difftime(t2,t1);
+
+
+		for(unsigned int i=0; i<vect_col.size();++i)
+		{
+			vect_col.at(i).displayInConsole();
+		}
+
+		cout<<"Execution time : "<<tps<<endl;
 	}
+	else
+	{
+		cout << "syntax error in the charpente file..."<<endl;
+	}
+	/*
+	Parser p;
+	string s("./charpente11.txt");
+	p.setFilepath(s);
+	cout << "Parser\nbool:"<<p.parseFile()<<endl;
+	cout << "Col du parser ::"<<endl;
+	p.getCol().displayInConsole();
 	//*/
-	cout<<"Execution time : "<<tps<<endl;
 	cout<<"##Quit"<<endl;
 	return 0;
 }

@@ -63,8 +63,8 @@ Sommet & Sommet::addSommetAt(Sommet * s, const int et)
 int Sommet::removeSommetAt(Sommet & s, const int et)
 {
 	vector<Sommet*> * vect = &(this->v.at(et-1));
-	vector<Sommet*>::iterator it;
-	for (it=vect->begin();it!=vect->end();)
+	vector<Sommet*>::iterator it=vect->begin();
+	while (it<vect->end())
 	{
 		if( (*it)==&s )
 		{
@@ -76,7 +76,7 @@ int Sommet::removeSommetAt(Sommet & s, const int et)
 			return 0;
 		}
 		it++;
-	}
+	};
 
 	return -1;
 }
@@ -151,7 +151,7 @@ void Sommet::setSign(int s)
 bool Sommet::isEtContains(int et, int num)
 {
 	vector<Sommet*> v_et = this->getEt(et);
-	for (int i=0; i<v_et.size();++i)
+	for (unsigned int i=0; i<v_et.size();++i)
 	{
 		if (v_et.at(i)->num == num) return true;
 	}

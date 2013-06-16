@@ -27,8 +27,9 @@ vector<Coloration> Model::generer(Coloration & col1)
 	//Sleep(1000);
 	int tmp;
 	Sommet * sTmp;
+	unsigned int i = 0;
 		//boucle sur le vecteur de sommet d'une classe de coloration
-		for (unsigned int i=0;i<col1.size();)
+		while(i<col1.size())
 		{
 			//recupere le premier sommet avec un etage 2
 			tmp = col1.nextSommetWithEt2(i);
@@ -40,22 +41,21 @@ vector<Coloration> Model::generer(Coloration & col1)
 				Sommet * sommetDansEt2 = &sommetAvecEt2->getSommetAt(2,0);
 				//recupere l'index du sommet de l'etage 1 qui a une couleur ambigue
 				// avec le sommet de l'etage 2.
-
-
 				int indexEt1 = col1.getAmbigousColor(i);
 				if (indexEt1>=0	)
 				{
 					//creation d'une nouvelle classe de coloration clone de la precedente
+					Sommet * sommetDansEt1 = sommetAvecEt2->getEt(1).at(indexEt1);
 					newCol = new Coloration(col1);
 					this->nbClass++;
 					newCol->setNum(this->nbClass);
 					// remplace tous les sommets a l'index "indexEt1" par le sommet de l'etage 2 dans la nouvelle classe.
-					newCol->replace( (*sommetAvecEt2->getEt(1).at(indexEt1)), (*sommetDansEt2));
+					newCol->replace( (*sommetDansEt1), (*sommetDansEt2));
 					Sommet * sommetDansEt2newCol = newCol->at(i)->getEt(2).at(0);
 					// si la suppression du sommet de l'etage 2 a bien fonctionnee
 					if (newCol->at(i)->removeSommetAt(0, 2)>=0)
 					{
-						sTmp = newCol->getSommetByNum( sommetAvecEt2->getEt(1).at(indexEt1)->getNum() );
+						sTmp = newCol->getSommetByNum( sommetDansEt1->getNum() );
 						sTmp->getEt(1).clear();
 						Sommet tmp((*sommetDansEt2newCol));
 						tmp.setSign(-1);
@@ -65,12 +65,9 @@ vector<Coloration> Model::generer(Coloration & col1)
 					{
 						cout <<"error erasing"<<endl;
 					}
-					//if ( !col1.at(i-1)->isEtContains(1,sommetDansEt2->getNum()) )
-					//{
-					sTmp = col1.getSommetByNum( sommetAvecEt2->getEt(1).at(indexEt1)->getNum() );
-						sTmp->createNewEt();
-						sTmp->addSommetAt(sommetDansEt2,2);
-					//}
+					sTmp = col1.getSommetByNum( sommetDansEt1->getNum() );
+					sTmp->createNewEt();
+					sTmp->addSommetAt(sommetDansEt2,2);
 
 					vector<Coloration> vect1;
 					vect1 = generer(col1);
@@ -94,7 +91,7 @@ vector<Coloration> Model::generer(Coloration & col1)
 			{
 				i=col1.size();
 			}
-		}
+		};
 	vector<Coloration> vect;
 	vect.push_back(col1);
 	return vect;

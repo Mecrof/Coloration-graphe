@@ -11,7 +11,6 @@
 #include <vector>
 #include "Coloration.hpp"
 #include "Sommet.hpp"
-#include <windows.h>
 using std::vector;
 
 class Model {
